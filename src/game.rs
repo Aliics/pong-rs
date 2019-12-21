@@ -1,5 +1,8 @@
 use crate::paddle::PADDLE_START;
-use piston_window::{clear, rectangle, Event, PistonWindow};
+use piston_window::{
+    clear, rectangle, Button, ButtonArgs, ButtonEvent, ButtonState, Event, PistonWindow,
+    RenderEvent,
+};
 
 const BACKGROUND_COLOR: [f32; 4] = [0.0; 4];
 const FOREGROUND_COLOR: [f32; 4] = [1.0; 4];
@@ -19,7 +22,15 @@ impl Game {
 
     pub fn start(&mut self) {
         while let Some(e) = self.window.next() {
-            self.render(&e)
+            if let Some(_) = e.render_args() {
+                self.render(&e)
+            }
+            if let Some(b) = e.button_args() {
+                match b.state {
+                    ButtonState::Press => self.key_down(b.button),
+                    ButtonState::Release => self.key_up(b.button),
+                }
+            }
         }
     }
 
@@ -31,5 +42,13 @@ impl Game {
                 .iter()
                 .for_each(|p| rectangle(FOREGROUND_COLOR, *p, c.transform, g));
         });
+    }
+
+    fn key_down(&mut self, button: Button) {
+        println!("button down {:?}", button);
+    }
+
+    fn key_up(&mut self, button: Button) {
+        println!("button up {:?}", button);
     }
 }
