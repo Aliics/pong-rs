@@ -1,4 +1,5 @@
-use crate::window::WINDOW_SIZE;
+use crate::render::{window::WINDOW_SIZE, Renderable, FOREGROUND_COLOR};
+use piston_window::{rectangle, Context, G2d};
 
 const BALL_SIZE: [f64; 2] = [10.0, 10.0];
 
@@ -23,5 +24,16 @@ impl Ball {
     pub fn reset(&mut self) {
         self.transform = [BALL_START[0], BALL_START[1], BALL_SIZE[0], BALL_SIZE[1]];
         self.movement = [0.0; 2];
+    }
+}
+
+impl Renderable for Ball {
+    fn render(&self, context: Context, graphics: &mut G2d) {
+        rectangle(
+            FOREGROUND_COLOR,
+            self.transform,
+            context.transform,
+            graphics,
+        );
     }
 }

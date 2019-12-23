@@ -1,11 +1,11 @@
-use crate::ball::Ball;
-use crate::paddle::{Paddle, PADDLE_SPEED};
-use piston_window::{
-    clear, rectangle, Button, ButtonEvent, ButtonState, Event, Key, PistonWindow, RenderEvent,
+use crate::{
+    ball::Ball,
+    paddle::{Paddle, PADDLE_SPEED},
+    render::{Renderable, BACKGROUND_COLOR},
 };
-
-const BACKGROUND_COLOR: [f32; 4] = [0.0; 4];
-const FOREGROUND_COLOR: [f32; 4] = [1.0; 4];
+use piston_window::{
+    clear, Button, ButtonEvent, ButtonState, Event, Key, PistonWindow, RenderEvent,
+};
 
 pub struct Game {
     window: PistonWindow,
@@ -44,10 +44,8 @@ impl Game {
         let ball = self.ball.clone();
         self.window.draw_2d(event, |c, g, _| {
             clear(BACKGROUND_COLOR, g);
-            paddles
-                .iter()
-                .for_each(|p| rectangle(FOREGROUND_COLOR, p.transform, c.transform, g));
-            rectangle(FOREGROUND_COLOR, ball.transform, c.transform, g);
+            paddles.iter().for_each(|p| p.render(c, g));
+            ball.render(c, g);
         });
     }
 
