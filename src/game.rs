@@ -1,3 +1,4 @@
+use crate::ball::Ball;
 use crate::paddle::{Paddle, PADDLE_SPEED};
 use piston_window::{
     clear, rectangle, Button, ButtonEvent, ButtonState, Event, Key, PistonWindow, RenderEvent,
@@ -9,6 +10,7 @@ const FOREGROUND_COLOR: [f32; 4] = [1.0; 4];
 pub struct Game {
     window: PistonWindow,
     paddles: [Paddle; 2],
+    ball: Ball,
 }
 
 impl Game {
@@ -16,6 +18,7 @@ impl Game {
         Game {
             window,
             paddles: [Paddle::new_left(), Paddle::new_right()],
+            ball: Ball::new(),
         }
     }
 
@@ -38,11 +41,13 @@ impl Game {
     fn render(&mut self, event: &Event) {
         self.paddles[0].update_position();
         let paddles = self.paddles.clone();
+        let ball = self.ball.clone();
         self.window.draw_2d(event, |c, g, _| {
             clear(BACKGROUND_COLOR, g);
             paddles
                 .iter()
                 .for_each(|p| rectangle(FOREGROUND_COLOR, p.transform, c.transform, g));
+            rectangle(FOREGROUND_COLOR, ball.transform, c.transform, g);
         });
     }
 
