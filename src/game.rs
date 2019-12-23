@@ -1,4 +1,4 @@
-use crate::paddle::{PADDLE_SPEED, PADDLE_START};
+use crate::paddle::{Paddle, PADDLE_SPEED};
 use piston_window::{
     clear, rectangle, Button, ButtonEvent, ButtonState, Event, Key, PistonWindow, RenderEvent,
 };
@@ -8,16 +8,14 @@ const FOREGROUND_COLOR: [f32; 4] = [1.0; 4];
 
 pub struct Game {
     window: PistonWindow,
-    paddle_transforms: [[f64; 4]; 2],
-    paddle_movements: [[f64; 2]; 2],
+    paddles: [Paddle; 2],
 }
 
 impl Game {
     pub fn new(window: PistonWindow) -> Self {
         Game {
             window,
-            paddle_transforms: PADDLE_START,
-            paddle_movements: [[0.0; 2]; 2],
+            paddles: [Paddle::new_left(), Paddle::new_right()],
         }
     }
 
@@ -37,37 +35,32 @@ impl Game {
         }
     }
 
-    fn calc_position(&mut self) {
-        self.paddle_transforms[0][1] -= self.paddle_movements[0][0];
-        self.paddle_transforms[0][1] += self.paddle_movements[0][1];
-    }
-
     fn render(&mut self, event: &Event) {
-        self.calc_position();
-        let paddle_slices = self.paddle_transforms.clone();
+        self.paddles[0].update_position();
+        let paddles = self.paddles.clone();
         self.window.draw_2d(event, |c, g, _| {
             clear(BACKGROUND_COLOR, g);
-            paddle_slices
+            paddles
                 .iter()
-                .for_each(|p| rectangle(FOREGROUND_COLOR, *p, c.transform, g));
+                .for_each(|p| rectangle(FOREGROUND_COLOR, p.transform, c.transform, g));
         });
     }
 
     fn key_down(&mut self, key: Key) {
         if key == Key::A {
-            self.paddle_movements[0][0] = PADDLE_SPEED
+            self.paddles[0].movement[0] = PADDLE_SPEED
         }
         if key == Key::D {
-            self.paddle_movements[0][1] = PADDLE_SPEED
+            self.paddles[0].movement[1] = PADDLE_SPEED
         }
     }
 
     fn key_up(&mut self, key: Key) {
         if key == Key::A {
-            self.paddle_movements[0][0] = 0.0
+            self.paddles[0].movement[0] = 0.0
         }
         if key == Key::D {
-            self.paddle_movements[0][1] = 0.0
+            self.paddles[0].movement[1] = 0.0
         }
     }
 }
