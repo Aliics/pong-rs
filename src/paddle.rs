@@ -34,7 +34,15 @@ impl Paddle {
     }
 
     pub fn update_position(&mut self) {
-        self.transform[1] -= self.movement[0];
-        self.transform[1] += self.movement[1];
+        self.transform[1] -= if self.transform[1] > 0.0 {
+            self.movement[0]
+        } else {
+            0.0
+        };
+        self.transform[1] += if self.transform[1] < WINDOW_SIZE.1 as f64 - PADDLE_SIZE[1] {
+            self.movement[1]
+        } else {
+            0.0
+        };
     }
 }
