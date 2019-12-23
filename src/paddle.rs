@@ -4,10 +4,15 @@ const PADDLE_SIZE: [f64; 2] = [10.0, 100.0];
 
 pub const PADDLE_SPEED: f64 = 5.0;
 
-pub const PADDLE_LEFT_START: [f64; 4] = [0.0, 0.0, PADDLE_SIZE[0], PADDLE_SIZE[1]];
+pub const PADDLE_LEFT_START: [f64; 4] = [
+    0.0,
+    (WINDOW_SIZE.1 as f64 / 2.0) - (PADDLE_SIZE[1] / 2.0),
+    PADDLE_SIZE[0],
+    PADDLE_SIZE[1],
+];
 pub const PADDLE_RIGHT_START: [f64; 4] = [
     WINDOW_SIZE.0 as f64 - PADDLE_SIZE[0],
-    0.0,
+    (WINDOW_SIZE.1 as f64 / 2.0) - (PADDLE_SIZE[1] / 2.0),
     PADDLE_SIZE[0],
     PADDLE_SIZE[1],
 ];

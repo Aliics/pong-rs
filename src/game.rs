@@ -43,6 +43,8 @@ impl Game {
     fn render(&mut self, event: &Event) {
         self.player_paddle.update_position();
         self.computer_paddle.update_position();
+        self.ball
+            .update_position(&self.player_paddle, &self.computer_paddle);
         let player_paddle = self.player_paddle.clone();
         let computer_paddle = self.computer_paddle.clone();
         let ball = self.ball.clone();
