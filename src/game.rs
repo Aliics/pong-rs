@@ -9,7 +9,8 @@ use piston_window::{
 
 pub struct Game {
     window: PistonWindow,
-    paddles: [Paddle; 2],
+    player_paddle: Paddle,
+    computer_paddle: Paddle,
     ball: Ball,
 }
 
@@ -17,7 +18,8 @@ impl Game {
     pub fn new(window: PistonWindow) -> Self {
         Game {
             window,
-            paddles: [Paddle::new_left(), Paddle::new_right()],
+            player_paddle: Paddle::new_left(),
+            computer_paddle: Paddle::new_right(),
             ball: Ball::new(),
         }
     }
@@ -39,31 +41,34 @@ impl Game {
     }
 
     fn render(&mut self, event: &Event) {
-        self.paddles[0].update_position();
-        let paddles = self.paddles.clone();
+        self.player_paddle.update_position();
+        self.computer_paddle.update_position();
+        let player_paddle = self.player_paddle.clone();
+        let computer_paddle = self.computer_paddle.clone();
         let ball = self.ball.clone();
         self.window.draw_2d(event, |c, g, _| {
             clear(BACKGROUND_COLOR, g);
-            paddles.iter().for_each(|p| p.render(c, g));
+            player_paddle.render(c, g);
+            computer_paddle.render(c, g);
             ball.render(c, g);
         });
     }
 
     fn key_down(&mut self, key: Key) {
         if key == Key::A {
-            self.paddles[0].movement[0] = PADDLE_SPEED
+            self.player_paddle.movement[0] = PADDLE_SPEED
         }
         if key == Key::D {
-            self.paddles[0].movement[1] = PADDLE_SPEED
+            self.player_paddle.movement[1] = PADDLE_SPEED
         }
     }
 
     fn key_up(&mut self, key: Key) {
         if key == Key::A {
-            self.paddles[0].movement[0] = 0.0
+            self.player_paddle.movement[0] = 0.0
         }
         if key == Key::D {
-            self.paddles[0].movement[1] = 0.0
+            self.player_paddle.movement[1] = 0.0
         }
     }
 }

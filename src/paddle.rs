@@ -1,5 +1,4 @@
-use crate::render::{window::WINDOW_SIZE, Renderable, FOREGROUND_COLOR};
-use piston_window::{rectangle, Context, G2d};
+use crate::render::{window::WINDOW_SIZE, Renderable};
 
 const PADDLE_SIZE: [f64; 2] = [10.0, 100.0];
 
@@ -49,12 +48,7 @@ impl Paddle {
 }
 
 impl Renderable for Paddle {
-    fn render(&self, context: Context, graphics: &mut G2d) {
-        rectangle(
-            FOREGROUND_COLOR,
-            self.transform,
-            context.transform,
-            graphics,
-        );
+    fn transform(&self) -> [f64; 4] {
+        self.transform
     }
 }
